@@ -45,7 +45,7 @@
 				<span class="icon-bar"></span>
 			</button>
 			<p class="navbar-text navbar-left">Cégep de Drummondville</p>
-			<p class="navbar-text navbar-left">Bienvenue {!!Auth::user()? Auth::user()->name:'visiteur' !!}</p>
+			<p class="navbar-text navbar-left">Bienvenue {!!Auth::user()? Auth::user()->name.'/'.Auth::user()->prenom.' '.Auth::user()->nom:'visiteur' !!} </p>
 			
 			<p> 
 		</div>

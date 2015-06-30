@@ -22,9 +22,13 @@ class Note extends EloquentValidating
 	public function tp() {
 		return $this->belongsTo('App\Models\TP');
 	}
-	public function etudiant() {
+	/*
+	 * obsolete etudiant n'existe plus
+	 *public function etudiant() {
 		return $this->belongsTo('App\Models\Etudiant');
 	}
+	*/
+
 	public function question() {
 		return $this->belongsTo('App\Models\Question');
 	}

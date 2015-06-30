@@ -5,42 +5,59 @@
 | Application Routes
 |--------------------------------------------------------------------------
 |
-| Here is where you can register all of the routes for an application.
-| It's a breeze. Simply tell Laravel the URIs it should respond to
-| and give it the Closure to execute when that URI is requested.
-|
 */
 
 Route::post('tpsPourClasse', ['as' => 'tpsPourClasse', 'uses' => 'TPsController@itemsFor2Filters']);     //pour l'appel AJAX
 
 Route::group(['middleware'=>'auth'], function() {
 	/* 
-	 * Toutes les routes dans ce groupe demande une authorisation (user login) 
+	 * Routes pouvant être utilisées seulement si l'usager est connecté
 	 */
-	 	Route::get('/','HomeController@index');
+	 	
+		Route::group(['middleware'=>'prof'], function() { 
+			//Seul les professeurs peuvent prendre ces routes. 
+			
+			/* Classes */
+			Route::resource('classes', 'ClassesController');
+			
+			/* Travaux pratiques (TP) */
+			Route::get('tpsDistribuer/{id}', ['as' => 'tps.distribuer', 'uses' => 'TPsController@distribuer']);
+			Route::post('tpsDistribuer/{id}',  ['as' => 'tps.doDistribuer', 'uses' => 'TPsController@doDistribuer']);
+			Route::get('tpsCorriger/{tpid}/{classeid}',  ['as' => 'tps.corriger', 'uses' => 'TPsController@corriger']);		
+			Route::get('tpsAfficherResultats/{tpid}/{classeid}',  ['as' => 'tps.afficherResultats', 'uses' => 'TPsController@afficherResultats']);
+			Route::put('tpsDoCorriger',  ['as' => 'tps.doCorriger', 'uses' => 'TPsController@doCorriger']);
+			Route::any('afficheReponseAutreEtudiant', ['as' => 'tps.afficheReponseAutreEtudiant', 'uses' => 'TPsController@afficheReponseAutreEtudiant']); //call Ajax
+			Route::get('tpsTransmettreCorrection/{tpid}/{classeid}', ['as' => 'tps.transmettreCorrection', 'uses' => 'TPsController@transmettreCorrection']);
+			Route::get('tpsRetirerCorrection/{tpid}/{classeid}', ['as' => 'tps.retirerCorrection', 'uses' => 'TPsController@retirerCorrection']);
+			Route::get('tpsFormat/{id}', ['as' => 'tps.format', 'uses' => 'TPsController@format']);
+			Route::put('tpsDoFormat/{id}', ['as' => 'tps.doFormat', 'uses' => 'TPsController@doFormat']);
+			Route::get('tpsChangerPivotClasse/{tpid}/{classeid}', ['as' => 'tps.changerPivotClasse', 'uses' => 'TPsController@changerPivotClasse']);
+			Route::put('tpsDoChangerPivotClasse/{tpid}/{classeid}', ['as' => 'tps.doChangerPivotClasse', 'uses' => 'TPsController@doChangerPivotClasse']);
+			
+			Route::get('tps', 'TPsController1@distribuer');
+			Route::resource('tps', 'TPsController');
+			
+			
+			/* Questions */
+			Route::get('createAndBackToTP/{tpId}', ['as' => 'questions.createAndBackToTP', 'uses' => 'QuestionsController@createAndBackToTP']);
+			Route::post('storeAndBackToTP/{tpId}', ['as' => 'questions.storeAndBackToTP', 'uses' => 'QuestionsController@storeAndBackToTP']);
+			Route::post('questionsPourTp', ['as' => 'questionsPourTp', 'uses' => 'QuestionsController@itemsFor2Filters' ]);     //pour l'appel AJAX
+			Route::resource('questions', 'QuestionsController');
+			
+			/* Etudiants */
+			Route::post('etudiantsPourClasse', ['as' => 'etudiantsPourClasse', 'uses' => 'EtudiantsController@itemsFor2Filters']);     //pour l'appel AJAX
+			Route::resource('etudiants', 'EtudiantsController');
+		});
+		
+		
+		//Routes disponibles à tout le monde (prof ou étudiants)
+		
+		Route::get('/','HomeController@index');
 		Route::get('/home','HomeController@index');
-
-		/* Classes */
-		Route::resource('classes', 'ClassesController');
+			
 		
-		/* Travaux pratiques (TP) */
-		Route::get('tpsDistribuer/{id}', ['as' => 'tps.distribuer', 'uses' => 'TPsController@distribuer']);
-		Route::post('tpsDistribuer/{id}',  ['as' => 'tps.doDistribuer', 'uses' => 'TPsController@doDistribuer']);
-		Route::get('tpsCorriger/{tpid}/{classeid}',  ['as' => 'tps.corriger', 'uses' => 'TPsController@corriger']);		
-		Route::get('tpsAfficherResultats/{tpid}/{classeid}',  ['as' => 'tps.afficherResultats', 'uses' => 'TPsController@afficherResultats']);
-		Route::put('tpsDoCorriger',  ['as' => 'tps.doCorriger', 'uses' => 'TPsController@doCorriger']);
-		Route::any('afficheReponseAutreEtudiant', ['as' => 'tps.afficheReponseAutreEtudiant', 'uses' => 'TPsController@afficheReponseAutreEtudiant']); //call Ajax
-		Route::get('tpsTransmettreCorrection/{tpid}/{classeid}', ['as' => 'tps.transmettreCorrection', 'uses' => 'TPsController@transmettreCorrection']);
-		Route::get('tpsRetirerCorrection/{tpid}/{classeid}', ['as' => 'tps.retirerCorrection', 'uses' => 'TPsController@retirerCorrection']);
-		Route::get('tpsFormat/{id}', ['as' => 'tps.format', 'uses' => 'TPsController@format']);
-		Route::put('tpsDoFormat/{id}', ['as' => 'tps.doFormat', 'uses' => 'TPsController@doFormat']);
-		Route::get('tpsChangerPivotClasse/{tpid}/{classeid}', ['as' => 'tps.changerPivotClasse', 'uses' => 'TPsController@changerPivotClasse']);
-		Route::put('tpsDoChangerPivotClasse/{tpid}/{classeid}', ['as' => 'tps.doChangerPivotClasse', 'uses' => 'TPsController@doChangerPivotClasse']);
 		
-		Route::get('tps', 'TPsController1@distribuer');
-		Route::resource('tps', 'TPsController');
-		
-		/* Passation des TPs */ 
+		/* Passation des TPs */
 		Route::post('tpsPassationPourClasse', ['as' => 'tpsPassationPourClasse', 'uses' => 'TPsPassationController@itemsFor2Filters']);     //pour l'appel AJAX
 		Route::get('tpsPassationIndex', ['as' => 'tpsPassation.index', 'uses' => 'TPsPassationController@index']);
 		Route::get('tpsPassationRepondre/{classeId}/{tpId}', ['as' => 'tpsPassation.repondre', 'uses' => 'TPsPassationController@repondre']);
@@ -48,16 +65,7 @@ Route::group(['middleware'=>'auth'], function() {
 		Route::get('tpsPassationVoirCorrection/{classeId}/{tpId}', ['as' => 'tpsPassation.voirCorrection', 'uses' => 'TPsPassationController@voirCorrection']);
 		Route::put('tpsPassationVoirSuiteCorrection',  ['as' => 'tpsPassation.voirSuiteCorrection', 'uses' => 'TPsPassationController@voirSuiteCorrection']);
 		
-		/* Questions */
-		Route::get('createAndBackToTP/{tpId}', ['as' => 'questions.createAndBackToTP', 'uses' => 'QuestionsController@createAndBackToTP']);
-		Route::post('storeAndBackToTP/{tpId}', ['as' => 'questions.storeAndBackToTP', 'uses' => 'QuestionsController@storeAndBackToTP']);
-		Route::post('questionsPourTp', ['as' => 'questionsPourTp', 'uses' => 'QuestionsController@itemsFor2Filters' ]);     //pour l'appel AJAX
-		Route::resource('questions', 'QuestionsController');
 		
-		/* Etudiants */
-		Route::post('etudiantsPourClasse', ['as' => 'etudiantsPourClasse', 'uses' => 'EtudiantsController@itemsFor2Filters']);     //pour l'appel AJAX
-		Route::resource('etudiants', 'EtudiantsController');
-	
 		
 		// la création d'un usager ne peu se faire que par un usager déjà connecté. 
 		// TODO: ajouter que seul les gestionnaires peuvent le faire. Mais j'ai besoin de Entrust pour ca
@@ -75,8 +83,11 @@ Route::get('auth/register', 'Auth\AuthController@getRegister');
 Route::post('auth/register', 'Auth\AuthController@postRegister');
 
 
+
+
+// OBSOLETE
 // Dashboard route
-Route::get('userpanel/dashboard', function(){ return View::make('userpanel.dashboard'); });
+//obsolete Route::get('userpanel/dashboard', function(){ return View::make('userpanel.dashboard'); });
 
 // Applies auth filter to the routes within admin/
 // Route::when('userpanel/*', 'auth');  enlever pour réintroduire auth, mais pas certain 

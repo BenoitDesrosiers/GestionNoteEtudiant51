@@ -4,26 +4,49 @@
     {!! csrf_field() !!}
 
     <div class="col-md-6">
-        Name
+        DA ou numéro d'employé
         <input type="text" name="name" value="{{ old('name') }}">
     </div>
 
     <div>
-        Email
+        Courriel
         <input type="email" name="email" value="{{ old('email') }}">
     </div>
 
     <div>
-        Password
+        Mot de passe
         <input type="password" name="password">
     </div>
 
     <div class="col-md-6">
-        Confirm Password
+        Confirmation du mot de passe
         <input type="password" name="password_confirmation">
     </div>
+    
+    <div class="col-md-6">
+        Prénom
+        <input type="text" name="prenom" value="{{ old('prenom') }}">
+    </div>
+    
+     <div class="col-md-6">
+        Nom
+        <input type="text" name="nom" value="{{ old('nom') }}">
+    </div>
+    
+    <div class="col-md-6">
+        Type (e = étudiant, p = professeur)
+        <input type="text" name="type" value="{{ old('type') }}">
+    </div>
+    
+    <div class="form-group">
 
+		Programme
+		<input type="text" name="programme_id" value="{{ old('programme_id') }}">
+		
+	</div>
+    
+    
     <div>
-        <button type="submit">Register</button>
+        <button type="submit">Enregistrer</button>
     </div>
 </form>

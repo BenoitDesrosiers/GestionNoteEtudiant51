@@ -5,6 +5,7 @@ use Illuminate\Database\Migrations\Migration;
 
 class CreateEtudiants extends Migration {
 
+	// OBSOLETE les étudiants sont maintenant des users
 	/**
 	 * Run the migrations.
 	 *
