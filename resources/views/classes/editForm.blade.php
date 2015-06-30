@@ -1,4 +1,8 @@
-<?php if(!isset($classe)) {$classe = new Classe;}?>
+<?php 
+use App\Models\Classe;
+
+if(!isset($classe)) {$classe = new Classe;}
+?>
 
 <div class="form-group">
 	{!! Form::label('code', 'Code:', ['class' => "col-sm-2 control-label"]) !!} 

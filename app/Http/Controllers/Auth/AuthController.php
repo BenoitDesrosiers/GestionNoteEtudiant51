@@ -46,7 +46,8 @@ class AuthController extends Controller
         	'prenom' => 'required|max:255',	
             'email' => 'required|email|max:255|unique:users',
             'password' => 'required|confirmed|min:6',
-        	'type' => 'required|max:1|in:e,p'
+        	'type' => 'required|max:1|in:e,p',
+        	'programme_id' => 'required|exists:programmes,id',
         ]);
     }
 
@@ -64,7 +65,8 @@ class AuthController extends Controller
             'password' => bcrypt($data['password']),
         	'nom' => $data['nom'],
         	'prenom' => $data['prenom'],
-        	'type' => $data['type']
+        	'type' => $data['type'],
+        	'programme_id' => $data['programme_id'],
         ]);
     }
 }

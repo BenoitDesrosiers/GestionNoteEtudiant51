@@ -38,7 +38,15 @@
         <input type="text" name="type" value="{{ old('type') }}">
     </div>
     
+    <div class="form-group">
+
+		Programme
+		<input type="text" name="programme_id" value="{{ old('programme_id') }}">
+		
+	</div>
+    
+    
     <div>
-        <button type="submit">Register</button>
+        <button type="submit">Enregistrer</button>
     </div>
 </form>
