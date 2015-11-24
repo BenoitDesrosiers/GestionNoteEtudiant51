@@ -1,6 +1,6 @@
 /vendor
 /node_modules
-.env
+#.env   <--- à remettre ne production
 .buildpath
 .env.example
 .project
