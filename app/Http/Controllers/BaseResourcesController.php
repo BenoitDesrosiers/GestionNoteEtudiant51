@@ -20,7 +20,7 @@ use Redirect;
 class BaseResourcesController extends Controller
 {
 	protected $gestion;
-	protected $base;
+	protected $baseView;
 	protected $message_store;
 	protected $message_update;
 	protected $message_delete;
@@ -29,27 +29,27 @@ class BaseResourcesController extends Controller
 	
 	public function index()
 	{	
-		return View::make($this->base.'.index', $this->gestion->index());
+		return View::make($this->baseView.'.index', $this->gestion->index());
 	}
 	
 	public function create()
 	{
-		return View::make($this->base.'.create', $this->gestion->create());
+		return View::make($this->baseView.'.create', $this->gestion->create());
 	}
 	
 	public function store()
 	{
 		$return = $this->gestion->store(Input::all());
 		if($return === true) {
-			return Redirect::route($this->base.'.index')->with('message_success', $this->message_store);
+			return Redirect::route($this->baseView.'.index')->with('message_success', $this->message_store);
 		} else {
-			return Redirect::route($this->base.'.create')->withInput()->withErrors($return);
+			return Redirect::route($this->baseView.'.create')->withInput()->withErrors($return);
 		}
 	}
 	
 	public function edit($id)
 	{
-		return View::make($this->base.'.edit', $this->gestion->edit($id));		
+		return View::make($this->baseView.'.edit', $this->gestion->edit($id));		
 	}
 	
 	
@@ -57,9 +57,9 @@ class BaseResourcesController extends Controller
 	{
 		$return = $this->gestion->update($id, Input::all());
 		if($return === true) {
-			return Redirect::route($this->base.'.index')->with('message_success', $this->message_update);
+			return Redirect::route($this->baseView.'.index')->with('message_success', $this->message_update);
 		} else {
-			return Redirect::route($this->base.'.edit')->withInput()->withErrors($return);
+			return Redirect::route($this->baseView.'.edit')->withInput()->withErrors($return);
 		}	
 	}
 	

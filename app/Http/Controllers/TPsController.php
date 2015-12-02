@@ -25,7 +25,7 @@ class TPsController extends BaseFilteredResourcesController
 	public function __construct(TPsGestion $gestion) {
 		//parent::__construct();
 		$this->gestion = $gestion;
-		$this->base = "tps";
+		$this->baseView= "tps";
 		$this->message_store = 'Le travail pratique a été ajouté';
 		$this->message_update = 'Le travail pratique a été modifié';
 		$this->message_delete = 'Le travail pratique a été effacé';
@@ -34,15 +34,15 @@ class TPsController extends BaseFilteredResourcesController
 
 	
 	public function changerPivotClasse($tp_id, $classe_id) {
-		return View::make($this->base.'.changerPivotClasse', $this->gestion->changerPivotClasse($tp_id, $classe_id));
+		return View::make($this->baseView.'.changerPivotClasse', $this->gestion->changerPivotClasse($tp_id, $classe_id));
 	}
 	
 	public function doChangerPivotClasse($tp_id, $classe_id) {
 		$return = $this->gestion->doChangerPivotClasse($tp_id, $classe_id, Input::get('poids_local'), Input::get('commentaire_visible'));
 		if($return=== true) {
-			return Redirect::route($this->base.'.index')->with('message_success', 'Le poids local a été changé');
+			return Redirect::route($this->baseView.'.index')->with('message_success', 'Le poids local a été changé');
 		} else {
-			return Redirect::route($this->base.'.changerPivotClasse',$tp_id, $classe_id)->withInput()->withErrors($return);
+			return Redirect::route($this->baseView.'.changerPivotClasse',$tp_id, $classe_id)->withInput()->withErrors($return);
 		}
 		
 	}
@@ -51,15 +51,15 @@ class TPsController extends BaseFilteredResourcesController
 	 * affiche les classes associées à ce TP et permet de distribuer ce TP pour les classes sélectionnées
 	 */
 	public function distribuer($id) {
-		return View::make($this->base.'.distribuer', $this->gestion->distribuer($id));
+		return View::make($this->baseView.'.distribuer', $this->gestion->distribuer($id));
 	}
 	
 	public function doDistribuer($id) {
 		$return = $this->gestion->doDistribuer($id, Input::all());
 		if($return === true ) {
-			return Redirect::route($this->base.'.index')->with('message_success', 'Les TPs ont été distribués/retirés correctement');
+			return Redirect::route($this->baseView.'.index')->with('message_success', 'Les TPs ont été distribués/retirés correctement');
 		} else {
-			return Redirect::route($this->base.'.distribuer',$id)->withInput()->with('message_danger', "Une erreur c'est produite");
+			return Redirect::route($this->baseView.'.distribuer',$id)->withInput()->with('message_danger', "Une erreur c'est produite");
 		}
  	}
 
@@ -68,7 +68,7 @@ class TPsController extends BaseFilteredResourcesController
  	 */
  	
  	public function format($id) {
- 		return View::make($this->base.'.format', $this->gestion->format($id));
+ 		return View::make($this->baseView.'.format', $this->gestion->format($id));
  	}
  	
  	public function doFormat($id) {
@@ -79,9 +79,9 @@ class TPsController extends BaseFilteredResourcesController
  			$return = $this->gestion->doFormat($id, $input);
  		}
  		if($return === true ) {
- 			return Redirect::route($this->base.'.index')->with('message_success', "Le format du TP a été mis à jour");
+ 			return Redirect::route($this->baseView.'.index')->with('message_success', "Le format du TP a été mis à jour");
  		} else {
- 			return Redirect::route($this->base.'.index')->with('message_danger', "Une erreur c'est produite");
+ 			return Redirect::route($this->baseView.'.index')->with('message_danger', "Une erreur c'est produite");
   		}
  	}
  	
@@ -93,7 +93,7 @@ class TPsController extends BaseFilteredResourcesController
  	
  	public function corriger($tp_id, $classe_id) {
  		Session::put('autreEtudiantOffset', 0); //init de la variable de session
- 		return View::make($this->base.'.corriger', $this->gestion->corriger($tp_id, $classe_id, 0, 0));
+ 		return View::make($this->baseView.'.corriger', $this->gestion->corriger($tp_id, $classe_id, 0, 0));
  	}
  	
  	public function doCorriger() {
@@ -110,7 +110,7 @@ class TPsController extends BaseFilteredResourcesController
  		$input = Input::all();
  		if($return){
 	 		if(isset($input['terminer'])) {
-	 			return Redirect::route($this->base.'.index')->with('message_success', 'Vos corrections sont enregistrées');
+	 			return Redirect::route($this->baseView.'.index')->with('message_success', 'Vos corrections sont enregistrées');
 	 		} else {
 	 			if(isset($input['sauvegarde']))	 {					
 	 				// les offsets restent les mêmes
@@ -123,16 +123,16 @@ class TPsController extends BaseFilteredResourcesController
 	 			} elseif(isset($input['questionPrecedente']))	 {
 	 				$offset_question--;
 	 			}
-	 			return View::make($this->base.'.corriger', $this->gestion->corriger($tp_id, $classe_id,  $offset_etudiant, $offset_question) );
+	 			return View::make($this->baseView.'.corriger', $this->gestion->corriger($tp_id, $classe_id,  $offset_etudiant, $offset_question) );
 	 		}
  		} else {
-			return Redirect::route($this->base.'.corriger')->withInput()->withErrors($return);
+			return Redirect::route($this->baseView.'.corriger')->withInput()->withErrors($return);
  		}
  	}
  	
  	
  	public function afficherResultats($tp_id, $classe_id) {
- 		return View::make($this->base.'.afficherResultats', $this->gestion->resultats($tp_id, $classe_id));
+ 		return View::make($this->baseView.'.afficherResultats', $this->gestion->resultats($tp_id, $classe_id));
  	}
  	
  	
@@ -141,7 +141,7 @@ class TPsController extends BaseFilteredResourcesController
  		$classe_id = Session::get('classeId');
  		$tp_id = Session::get('tpId');
  		$question_id = Session::get('questionId');
- 		return View::make($this->base.'.reponseAutreEtudiant_subview', 
+ 		return View::make($this->baseView.'.reponseAutreEtudiant_subview', 
  				$this->gestion->afficheReponseAutreEtudiant(Input::get('direction'), $etudiantCourant_id, $classe_id, $tp_id, $question_id));
  	}
  	
@@ -149,18 +149,18 @@ class TPsController extends BaseFilteredResourcesController
  	public function transmettreCorrection($tp_id, $classe_id) {
  		$return = $this->gestion->transmettreCorrection($tp_id, $classe_id);
  		if($return) {
- 			return Redirect::route($this->base.'.index')->with('message_success', 'Les corrections sont transmises.');
+ 			return Redirect::route($this->baseView.'.index')->with('message_success', 'Les corrections sont transmises.');
  		} else {
- 			return Redirect::route($this->base.'.index')->with('message_erreur', "Une erreur s'est produite. Les corrections ne sont pas transmises. Contacter le support");
+ 			return Redirect::route($this->baseView.'.index')->with('message_erreur', "Une erreur s'est produite. Les corrections ne sont pas transmises. Contacter le support");
  		}
  		
  	}
  	public function retirerCorrection($tp_id, $classe_id) {
  		$return = $this->gestion->retirerCorrection($tp_id, $classe_id);
  		if($return) {
- 			return Redirect::route($this->base.'.index')->with('message_success', 'Les corrections ont été retirées.');
+ 			return Redirect::route($this->baseView.'.index')->with('message_success', 'Les corrections ont été retirées.');
  		} else {
- 			return Redirect::route($this->base.'.index')->with('message_erreur', "Une erreur s'est produite. Les corrections ne sont pas été retirées. Contacter le support");
+ 			return Redirect::route($this->baseView.'.index')->with('message_erreur', "Une erreur s'est produite. Les corrections ne sont pas été retirées. Contacter le support");
  		}
  			
  	}

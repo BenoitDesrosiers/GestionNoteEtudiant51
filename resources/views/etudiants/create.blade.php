@@ -12,12 +12,12 @@
 <div class="container">
 	<section class="section-padding">
 		<div class="jumbotron text-left">			
-			{{ Form::open(['url'=> 'etudiants', 'class' => 'form-horizontal', 'role'=>'form']) }}
+			{!! Form::open(['url'=> 'etudiants', 'class' => 'form-horizontal', 'role'=>'form']) !!}
 				@include('etudiants.editForm')
 				<div class="form-group">
-					{{ Form::submit('Créer', ['class' => 'btn btn-primary'])}}
+					{!! Form::submit('Créer', ['class' => 'btn btn-primary'])!!}
 				</div>
-			{{ Form::close() }}
+			{!! Form::close() !!}
 		</div>
 	</section>
 </div>

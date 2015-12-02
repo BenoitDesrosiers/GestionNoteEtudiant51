@@ -23,7 +23,7 @@ class QuestionsController extends BaseFilteredResourcesController {
 	public function __construct(QuestionsGestion $gestion) {
 		//parent::__construct();
 		$this->gestion = $gestion;
-		$this->base = "questions";
+		$this->baseView= "questions";
 		$this->message_store = "La question a été ajoutée";
 		$this->message_update = "La question a été modifiée";
 		$this->message_delete = "La question a été effacée";
@@ -32,14 +32,14 @@ class QuestionsController extends BaseFilteredResourcesController {
 	//overwrite la superclasse pour ajouter le paramêtre supplémentaire de create
 	public function create()
 	{
-		return View::make($this->base.'.create', $this->gestion->create( $this->base.".store", Input::get('belongsToId')));
+		return View::make($this->baseView.'.create', $this->gestion->create( $this->baseView.".store", Input::get('belongsToId')));
 	}
 	
 	
 	public function createAndBackToTP($tp_id)
 	{
 		
-		return View::make($this->base.'.create', $this->gestion->create([$this->base.".storeAndBackToTP", $tp_id], $tp_id));
+		return View::make($this->baseView.'.create', $this->gestion->create([$this->baseView.".storeAndBackToTP", $tp_id], $tp_id));
 	}
 
 	public function storeAndBackToTp($tp_id)
@@ -48,7 +48,7 @@ class QuestionsController extends BaseFilteredResourcesController {
 		if($return === true) {
 			return Redirect::route('tps.format',$tp_id)->with('message_success', $this->message_store);
 		} else {
-			return Redirect::route($this->base.'.createAndBackToTP', $tp_id)->withInput()->withErrors($return);
+			return Redirect::route($this->baseView.'.createAndBackToTP', $tp_id)->withInput()->withErrors($return);
 		}
 	}
 }

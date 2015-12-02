@@ -6,6 +6,7 @@ use App\Http\ControllersGestion\BaseFilteredGestion;
 use App\Models\Classe;
 use App\Models\User;
 use Input;
+use Hash;
 
 
 
@@ -49,11 +50,53 @@ public function index() {
 	
 }
 
-/* on ne doit pas créer un étudiant ici, car un étudiant est avant tout un usager. 
 public function create() {
 	return $this->displayView('Aucune Classe');
 }
-*/
+
+/**
+ * Enregistrement initial dans la BD
+ *
+ *
+ * @param[in] get int belongsToListSelect les ids des classes auxquelles cet étudiant sera associé.
+ * 					Si vide, alors l'étudiant ne sera associé à rien.
+ * 				 	Les ids doivent être valide, sinon une page d'erreur sera affichée.
+ *
+ */
+public function store($input) {
+	$classeId = 0;
+	//verifie que les ids de classe passé en paramêtre sont bons
+	if(isset($input['belongsToListSelect'])) {
+		$classeIds = $input['belongsToListSelect'];
+		if(!allIdsExist($classeIds, 'App\Models\Classe')){
+			App::abort(404);
+		}
+	} else {
+		$classeIds =[];
+	}
+	$etudiant = new $this->model([
+					'name'=>$input['name'], 
+					'prenom'=>$input['prenom'],
+					'nom'=>$input['nom'],
+					'email'=>$input['email'],
+					'password'=> Hash::make($input['password']),
+					'programme_id'=>$input['programme_id'],
+					'type'=>'e'
+			
+					]);
+	if($etudiant->save()) {//TODO: mettre ca dans une transaction
+		foreach($classeIds as $classeId) {
+			if($classeId <>0 ){
+				//associe la classe au TP (many to many)
+				$etudiant->classes()->attach($classeId);
+			}
+		}
+		return true;
+	} else {
+		return $etudiant->validationMessages;
+	}
+
+}
 
 /**
  * Enregistrement initial dans la BD
@@ -70,7 +113,9 @@ public function show($id){
 }
 
 public function edit($id){
-	return $this->displayView('Aucune classe', $this->model->findOrFail($id));
+	$etudiant =  $this->model->findOrFail($id); //TODO: catch exception
+	$etudiant->password = "ne peut être modifié";
+	return $this->displayView('Aucune classe', $etudiant);
 }
 
 /**
@@ -93,7 +138,14 @@ public function update($id, $input){
 		}
 					
 		$etudiant = $this->model->findOrFail($id); //TODO catch l'exception
-		// ne permet pas de changer les autres champs. 
+		
+		$etudiant->name = $input['name'];
+		$etudiant->prenom = $input['prenom'];
+		$etudiant->nom = $input['nom'];
+		$etudiant->email = $input['email'];
+		//$etudiant->password =  Hash::make($input['password']); Pour l'instant, je ne permet pas de changer le password
+		$etudiant->programme_id = $input['programme_id'];
+		
 		if($etudiant->save()) {
 			$etudiant->classes()->sync($classeIds);
 			return true;

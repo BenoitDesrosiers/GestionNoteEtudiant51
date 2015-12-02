@@ -18,7 +18,7 @@ class EtudiantsController extends BaseFilteredResourcesController {
 	public function __construct(EtudiantsGestion $gestion) {
 		//parent::__construct();
 		$this->gestion = $gestion;
-		$this->base = "etudiants";
+		$this->baseView = "etudiants";
 		$this->message_store = "L'étudiant a été ajouté";
 		$this->message_update = "L'étudiant a été modifié";
 		$this->message_delete = "L'étudiant a été effacé";
