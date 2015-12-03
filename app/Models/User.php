@@ -45,11 +45,10 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
      * database relationships
     */
     
-    // Un étudiant est associée à plusieurs Classe 
-    // TODO: ce n'est pas tous les users qui sont étudiants. Faut vraiment avoir une classe étudiant qui est lié a un user de type e
+    // Un étudiant ou un prof est associée à plusieurs Classe 
     
     public function classes() {
-    	return $this->belongsToMany('App\Models\Classe', 'etudiants_classes', 'etudiant_id', 'classe_id');
+    	return $this->belongsToMany('App\Models\Classe', 'users_classes', 'user_id', 'classe_id');
     }
     public function programme() {
     	return $this->belongsTo('App\Models\Programme');

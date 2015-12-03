@@ -40,7 +40,7 @@ class Classe extends EloquentValidating   //TODO: mettre un namespace
 	// Une classe a plusieurs étudiants (users) d'inscrit
 	
 	public function etudiants() {
-		return $this->belongsToMany('App\Models\User', 'etudiants_classes', 'classe_id', 'etudiant_id');
+		return $this->belongsToMany('App\Models\User', 'users_classes', 'classe_id', 'user_id');
 	}
 	
 	// Une Classe appartient à une Session

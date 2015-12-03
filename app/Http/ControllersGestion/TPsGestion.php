@@ -312,7 +312,7 @@ public function doFormat($id, $input) {
  * @param integer $offset_etudiant le numéro de séquence de l'étudiant à corriger 
  * @param integer $offset_question le numéro de séquence de la question à corriger 
  */
-public function corriger($tp_id, $classe_id, $offset_etudiant, $offset_question) {
+public function corriger($tp_id, $classe_id, $offset_etudiant, $offset_question) {   //FIXME: ca plante quand il n'y a rien a corriger. 
 	try{
 		$classe= Classe::findOrFail($classe_id);
 		$tp = $classe->tps()->where("tp_id",'=',$tp_id)->first();
