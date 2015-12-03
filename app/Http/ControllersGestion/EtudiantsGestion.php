@@ -5,6 +5,8 @@ namespace App\Http\ControllersGestion;
 use App\Http\ControllersGestion\BaseFilteredGestion;
 use App\Models\Classe;
 use App\Models\User;
+use App\Models\Role;
+
 use Input;
 use Hash;
 
@@ -84,6 +86,8 @@ public function store($input) {
 					'type'=>'e'
 			
 					]);
+	
+	
 	if($etudiant->save()) {//TODO: mettre ca dans une transaction
 		foreach($classeIds as $classeId) {
 			if($classeId <>0 ){
@@ -91,6 +95,9 @@ public function store($input) {
 				$etudiant->classes()->attach($classeId);
 			}
 		}
+		
+		$role = Role::where('name', '=', 'etudiant')->first();
+		$etudiant->attachRole($role);
 		return true;
 	} else {
 		return $etudiant->validationMessages;

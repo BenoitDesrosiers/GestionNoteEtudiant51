@@ -9,15 +9,15 @@ use Illuminate\Auth\Passwords\CanResetPassword;
 use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
 
-//avant la migration à 5.1
-//use Zizaco\Confide\ConfideUser;
-//use Zizaco\Confide\ConfideUserInterface;
+// pour role based authentication
+use Zizaco\Entrust\Traits\EntrustUserTrait;
+
  
 class User extends Model implements AuthenticatableContract, CanResetPasswordContract {
 // avant 5.1 ConfideUserInterface {
 //    use ConfideUser;
     
-    use Authenticatable, CanResetPassword;
+    use Authenticatable, CanResetPassword, EntrustUserTrait;
 
     /**
      * The database table used by the model.

@@ -6,6 +6,9 @@ La navigation peut se faire de question en question, ou d'étudiants en étudian
 
 Il a été développé en utilisant le framework Laravel (5.1). 
 
+Il utilise le plugin Zizaco/entrust https://github.com/Zizaco/entrust
+afin de gérer les rôles des usagers.
+
 ##  Documentation officielle
 
 à venir

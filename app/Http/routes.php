@@ -14,8 +14,8 @@ Route::group(['middleware'=>'auth'], function() {
 	 * Routes pouvant être utilisées seulement si l'usager est connecté
 	 */
 	 	
-		Route::group(['middleware'=>'prof'], function() { 
-			//Seul les professeurs peuvent prendre ces routes. 
+		Route::group(['middleware'=>['role:admin|prof']], function() { 
+			//Seul l'admin et les professeurs peuvent prendre ces routes. 
 			
 			/* Classes */
 			Route::resource('classes', 'ClassesController');
@@ -46,6 +46,7 @@ Route::group(['middleware'=>'auth'], function() {
 			
 			/* Etudiants */
 			Route::post('etudiantsPourClasse', ['as' => 'etudiantsPourClasse', 'uses' => 'EtudiantsController@itemsFor2Filters']);     //pour l'appel AJAX
+			
 			Route::resource('etudiants', 'EtudiantsController');
 		});
 		
@@ -57,15 +58,18 @@ Route::group(['middleware'=>'auth'], function() {
 			
 		
 		
-		/* Passation des TPs */
-		Route::post('tpsPassationPourClasse', ['as' => 'tpsPassationPourClasse', 'uses' => 'TPsPassationController@itemsFor2Filters']);     //pour l'appel AJAX
-		Route::get('tpsPassationIndex', ['as' => 'tpsPassation.index', 'uses' => 'TPsPassationController@index']);
-		Route::get('tpsPassationRepondre/{classeId}/{tpId}', ['as' => 'tpsPassation.repondre', 'uses' => 'TPsPassationController@repondre']);
-		Route::put('tpsPassationDoRepondre', ['as' => 'tpsPassation.doRepondre', 'uses' => 'TPsPassationController@doRepondre']);
-		Route::get('tpsPassationVoirCorrection/{classeId}/{tpId}', ['as' => 'tpsPassation.voirCorrection', 'uses' => 'TPsPassationController@voirCorrection']);
-		Route::put('tpsPassationVoirSuiteCorrection',  ['as' => 'tpsPassation.voirSuiteCorrection', 'uses' => 'TPsPassationController@voirSuiteCorrection']);
+		Route::group(['middleware'=>['permission:passer-test']], function() {
 		
-		
+			/* Passation des TPs */
+			Route::post('tpsPassationPourClasse', ['as' => 'tpsPassationPourClasse', 'uses' => 'TPsPassationController@itemsFor2Filters']);     //pour l'appel AJAX
+			Route::get('tpsPassationIndex', ['as' => 'tpsPassation.index', 'uses' => 'TPsPassationController@index']);
+			Route::get('tpsPassationRepondre/{classeId}/{tpId}', ['as' => 'tpsPassation.repondre', 'uses' => 'TPsPassationController@repondre']);
+			Route::put('tpsPassationDoRepondre', ['as' => 'tpsPassation.doRepondre', 'uses' => 'TPsPassationController@doRepondre']);
+			Route::get('tpsPassationVoirCorrection/{classeId}/{tpId}', ['as' => 'tpsPassation.voirCorrection', 'uses' => 'TPsPassationController@voirCorrection']);
+			Route::put('tpsPassationVoirSuiteCorrection',  ['as' => 'tpsPassation.voirSuiteCorrection', 'uses' => 'TPsPassationController@voirSuiteCorrection']);
+		});
+				
+			
 		
 		// la création d'un usager ne peu se faire que par un usager déjà connecté. 
 		// TODO: ajouter que seul les gestionnaires peuvent le faire. Mais j'ai besoin de Entrust pour ca

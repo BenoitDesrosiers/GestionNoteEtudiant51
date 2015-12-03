@@ -148,6 +148,11 @@ return [
          *  Pour Form et Html qui ne sont plus dans le core de 5.1
          */
         'Illuminate\Html\HtmlServiceProvider',
+    		
+    	/*
+    	 *  Pour role based authentication
+    	 */
+    	'Zizaco\Entrust\EntrustServiceProvider',
     ],
 
     /*
@@ -202,8 +207,11 @@ return [
         'Form'      => 'Illuminate\Html\FormFacade',
         'HTML'      => 'Illuminate\Html\HtmlFacade',
         
-        
-
+        /*
+         * Pour role based authentication
+         */
+    		
+    	'Entrust' => 'Zizaco\Entrust\EntrustFacade',
         
 
     ],

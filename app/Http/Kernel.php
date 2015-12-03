@@ -30,5 +30,8 @@ class Kernel extends HttpKernel
         'auth.basic' => \Illuminate\Auth\Middleware\AuthenticateWithBasicAuth::class,
         'guest' => \App\Http\Middleware\RedirectIfAuthenticated::class,
     	'prof' => \App\Http\Middleware\ProfSeulement::class,
+    	'role' => 'Zizaco\Entrust\Middleware\EntrustRole',
+    	'permission' => 'Zizaco\Entrust\Middleware\EntrustPermission',
+    	'ability' => 'Zizaco\Entrust\Middleware\EntrustAbility',
     ];
 }
