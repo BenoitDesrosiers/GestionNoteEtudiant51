@@ -4,36 +4,63 @@
 <section class="header section-padding">
 	<div class="container">
 		<div class="header-text">
-			<h1>{{{$classe->nom}}} / {{{$tp->nom}}} / {{{$etudiant->prenom}}} {{{$etudiant->nom}}}</h1>
+			<h3>{{{$classe->nom}}} / {{{$tp->nom}}} / {{{$etudiant->prenom}}} {{{$etudiant->nom}}}</h3>
+			<h4>{{$offset_question+1 . ") ".$question->nom}}</h4>
 			<p>sur: {{$tp->questions()->sum('sur_local')}}  vaut: {{{$tp->pivot->poids_local}}}
 		</div>
 	</div>
 </section>
-
 <div class="container">
 	<section class="section-padding">
 		<div class="jumbotron text-left">
-			{!! Form::open(['route'=> array('tps.doCorriger', $etudiant->id, $classe->id, $tp->id, $question->id), 'method' => 'PUT', 'class' => 'form-horizontal form-compact', 'role'=>'form']) !!}
-				@include('tps.corriger_subview')
-				<div class="form-group">
+			{!! Form::open(['route'=> array('tps.doCorriger'), 'method' => 'PUT', 'class' => 'form-horizontal form-compact', 'role'=>'form']) !!}
+				
+				
+				<div class="btn-group btn-group-xs">
 					
-				<?php $infoSup = ['class' => 'btn btn-primary col-xs-6 col-sm-3 col-md-2', 'name'=>'etudiantPrecedent'];
+				<?php $infoSup = ['class' => 'btn btn-primary col-xs-6 col-sm-3', 'name'=>'etudiantPrecedent'];
 						if(!$flagEtudiantPrecedent) {$infoSup['disabled'] = 'disabled';} ?>
 					{!! Form::submit('étudiant précédent', $infoSup) !!}
 
-				<?php $infoSup = ['class' => 'btn btn-primary col-xs-6 col-sm-3 col-md-2', 'name'=>'etudiantSuivant'];
+				<?php $infoSup = ['class' => 'btn btn-primary col-xs-6 col-sm-3', 'name'=>'etudiantSuivant'];
 						if(!$flagEtudiantSuivant) {$infoSup['disabled'] = 'disabled';} ?>
 					{!! Form::submit('étudiant suivant', $infoSup) !!}
 				
-				<?php $infoSup = ['class' => 'btn btn-primary col-xs-6 col-sm-3 col-md-2', 'name'=>'questionPrecedente'];
+				<?php $infoSup = ['class' => 'btn btn-primary col-xs-6 col-sm-3', 'name'=>'questionPrecedente'];
 						if(!$flagQuestionPrecedente) {$infoSup['disabled'] = 'disabled';} ?>
 					{!! Form::submit('question précédente',$infoSup) !!}
 
-				<?php $infoSup = ['class' => 'btn btn-primary col-xs-6 col-sm-3 col-md-2', 'name'=>'questionSuivante'];
+				<?php $infoSup = ['class' => 'btn btn-primary col-xs-6 col-sm-3', 'name'=>'questionSuivante'];
 						if(!$flagQuestionSuivante) {$infoSup['disabled'] = 'disabled';} ?>
 					{!! Form::submit('question suivante', $infoSup) !!}
 					
-					{!! Form::submit('Terminer', ['class' => 'btn btn-primary col-xs-12  col-sm-3 col-md-2', 'name'=>'terminer']) !!}
+					{!! Form::submit('Terminer', ['class' => 'btn btn-success col-xs-12  col-sm-12', 'name'=>'terminer']) !!}
+				</div>
+				
+				
+				
+				@include('tps.corriger_subview')
+				
+				
+				<div class=" btn-group btn-group-xs">
+					
+				<?php $infoSup = ['class' => 'btn btn-primary col-xs-6 col-sm-3', 'name'=>'etudiantPrecedent'];
+						if(!$flagEtudiantPrecedent) {$infoSup['disabled'] = 'disabled';} ?>
+					{!! Form::submit('étudiant précédent', $infoSup) !!}
+
+				<?php $infoSup = ['class' => 'btn btn-primary col-xs-6 col-sm-3', 'name'=>'etudiantSuivant'];
+						if(!$flagEtudiantSuivant) {$infoSup['disabled'] = 'disabled';} ?>
+					{!! Form::submit('étudiant suivant', $infoSup) !!}
+				
+				<?php $infoSup = ['class' => 'btn btn-primary col-xs-6 col-sm-3', 'name'=>'questionPrecedente'];
+						if(!$flagQuestionPrecedente) {$infoSup['disabled'] = 'disabled';} ?>
+					{!! Form::submit('question précédente',$infoSup) !!}
+
+				<?php $infoSup = ['class' => 'btn btn-primary col-xs-6 col-sm-3', 'name'=>'questionSuivante'];
+						if(!$flagQuestionSuivante) {$infoSup['disabled'] = 'disabled';} ?>
+					{!! Form::submit('question suivante', $infoSup) !!}
+					
+					{!! Form::submit('Terminer', ['class' => 'btn btn-success col-xs-12  col-sm-12', 'name'=>'terminer']) !!}
 				</div>
 			{!! Form::close() !!}
 			
