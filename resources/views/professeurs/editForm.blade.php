@@ -19,7 +19,7 @@ if(!isset($user)) {$user = new User;}
 </div> <!-- belongsToSelect -->
 
 <div class="form-group"> 
-	{!! Form::label('name', 'DA:', ['class' => "col-sm-2 control-label"]) !!} 
+	{!! Form::label('name', 'Numéro d\'employé:', ['class' => "col-sm-2 control-label"]) !!} 
 	<div class = 'col-sm-10'>
 		{!! Form::text('name', $user->name, ['class' => 'form-control']) !!}
 		{{ $errors->first('name') }}

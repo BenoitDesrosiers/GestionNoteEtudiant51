@@ -15,7 +15,7 @@ class HomeController extends Controller {
 
 	public function index()
 	{
-		if(Auth::user()->type == 'p') {
+		if(Auth::user()->ability('','enseigner')) {
 			return View::make('homePageProf');
 		} else {
 			return View::make('homePageEtudiant');

@@ -4,7 +4,7 @@
 <section class="header section-padding"> 
 	<div class="container"> 
 		<div class="header-text">
-			<h1>Édition d'un étudiant</h1>
+			<h1>Édition d'un Professeur</h1>
 		</div>
 	</div>	
 </section>
@@ -12,8 +12,8 @@
 <div class="container">
 	<section class="section-padding">
 		<div class="jumbotron text-left">
-			{!! Form::open(['action'=> ['EtudiantsController@update', $user->id], 'method' => 'PUT', 'class' => 'form-horizontal', 'role'=>'form']) !!}
-				@include('etudiants.editForm')
+			{!! Form::open(['action'=> ['ProfesseursController@update', $user->id], 'method' => 'PUT', 'class' => 'form-horizontal', 'role'=>'form']) !!}
+				@include('professeurs.editForm')
 				<div class="form-group">
 					{!! Form::submit('Sauvegarder', ['class' => 'btn btn-primary']) !!}
 				</div>

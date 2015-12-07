@@ -37,7 +37,7 @@ class BaseFilteredResourcesController extends BaseResourcesController
  */
 	
 	public function itemsFor2Filters() {
-		if(1==1 or Request::ajax()) { //TODO: enlever 1==1
+		if(Request::ajax()) {
 			return View::make($this->baseView.'.index_subview', $this->gestion->itemsFor2Filters(Input::get('belongsToId'), Input::get('filtre1Select')));
 		} else { //si le call n'est pas ajax.
 			return "vous n'avez pas les droits d'obtenir cette information";

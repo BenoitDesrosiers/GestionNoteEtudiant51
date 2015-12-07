@@ -5,6 +5,7 @@ namespace App\Http\ControllersGestion;
 use App\Http\ControllersGestion\BaseGestion;
 use App\Models\Classe;
 use App\Models\Sessionscholaire;
+use Auth;
 
 class ClassesGestion extends BaseGestion{
 
@@ -12,8 +13,17 @@ public function __construct(Classe $model){
 	$this->model = $model;
 }
 
+
 public function index() {
-	$lignes = $this->listeAllLignes();
+
+	//si l'usager connecté peu ajouter des classes, on liste toutes les classes
+	//sinon, c'est un professeur, alors on limite la liste des classes aux siennes
+	$u = Auth::user();
+	if(Auth::user()->ability('','ajout-classe')) {
+		$lignes = $this->listeAllLignes();
+	} else {
+		$lignes = $this->listeAllLignes()->filter(function($item) use ($u) {return $item->professeurs()->get()->contains("id",$u->id);} );
+	}
 	$sessionsList= Sessionscholaire::all()->lists( 'nom','id'); //TODO: y a-t-il moyen d'injecter Sessionscholaire?
 	$sessionSelected = Sessionscholaire::where("courant", 1)->value("id");
 	return compact('lignes','sessionsList', 'sessionSelected');

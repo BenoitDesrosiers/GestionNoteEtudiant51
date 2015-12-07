@@ -7,6 +7,9 @@
 				<div class="panel panel-default">
 					<div class="panel-heading">
 						<h1> Bienvenue dans le système de gestion de classes</h1>
+						@if(Auth::user()->ability('admin',''))
+							<a href="{{ action('ProfesseursController@index') }}" class="btn btn-info">Gestion des professeurs</a>	
+						@endif
 						<a href="{{ action('ClassesController@index') }}" class="btn btn-info">Gestion des classes</a>	
 						<a href="{{ action('TPsController@index') }}" class="btn btn-info">Gestion des travaux pratiques (TPs)</a>						
 						<a href="{{ action('QuestionsController@index') }}" class="btn btn-info">Gestion des questions</a>						

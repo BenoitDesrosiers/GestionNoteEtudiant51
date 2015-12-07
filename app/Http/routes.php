@@ -14,7 +14,13 @@ Route::group(['middleware'=>'auth'], function() {
 	 * Routes pouvant être utilisées seulement si l'usager est connecté
 	 */
 	 	
-		Route::group(['middleware'=>['role:admin|prof']], function() { 
+		Route::group(['middleware'=>['role:admin']], function() {
+			Route::resource('professeurs', 'ProfesseursController');
+			Route::post('professeursPourClasse', ['as' => 'professeursPourClasse', 'uses' => 'ProfesseursController@itemsFor2Filters']);     //pour l'appel AJAX
+					
+		});
+	
+		Route::group(['middleware'=>['role:admin|professeur']], function() { 
 			//Seul l'admin et les professeurs peuvent prendre ces routes. 
 			
 			/* Classes */
@@ -48,6 +54,7 @@ Route::group(['middleware'=>'auth'], function() {
 			Route::post('etudiantsPourClasse', ['as' => 'etudiantsPourClasse', 'uses' => 'EtudiantsController@itemsFor2Filters']);     //pour l'appel AJAX
 			
 			Route::resource('etudiants', 'EtudiantsController');
+				
 		});
 		
 		

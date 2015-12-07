@@ -6,7 +6,9 @@
 				<div class="panel panel-default">
 					<div class="panel-heading">
 						<h1> Liste des classes disponibles</h1>
-						<a href="{!!action('ClassesController@create') !!}" class="btn btn-primary">Créer une classe</a>						
+						@if(Auth::user()->ability('','ajout-classe'))
+							<a href="{!!action('ClassesController@create') !!}" class="btn btn-primary">Créer une classe</a>
+						@endif						
 					</div>
 					
 					@if ($lignes->isEmpty())
@@ -40,13 +42,15 @@
 										<td>{{ $classe->sessionscholaire()->first()->nom }} </td>
 										<td>{{ $classe->groupe }} </td>
 										<td>{{ $classe->local }} </td>
-										<td><a href="{!! action('ClassesController@edit',$classe->id) !!}" class="btn btn-info">Éditer</a></td>
-										<td>
-											{!! Form::open(array('action' => array('ClassesController@destroy',$classe->id), 'method' => 'delete', 'data-confirm' => 'Êtes-vous certain?')) !!}
-	                                        	<button type="submit" href="{!! URL::route('classes.destroy', $classe->id) !!}" class="btn btn-danger btn-mini">Effacer</button>
-	                                        {!! Form::close() !!}   {{-- méthode pour faire le delete tel que décrit sur http://www.codeforest.net/laravel-4-tutorial-part-2 , 
-	                                        						   un script js est appelé pour tous les form qui ont un "data-confirm" (voir assets/js/script.js) --}}
-										</td>
+										@if(Auth::user()->ability('','ajout-classe'))
+											<td><a href="{!! action('ClassesController@edit',$classe->id) !!}" class="btn btn-info">Éditer</a></td>
+											<td>
+												{!! Form::open(array('action' => array('ClassesController@destroy',$classe->id), 'method' => 'delete', 'data-confirm' => 'Êtes-vous certain?')) !!}
+		                                        	<button type="submit" href="{!! URL::route('classes.destroy', $classe->id) !!}" class="btn btn-danger btn-mini">Effacer</button>
+		                                        {!! Form::close() !!}   {{-- méthode pour faire le delete tel que décrit sur http://www.codeforest.net/laravel-4-tutorial-part-2 , 
+		                                        						   un script js est appelé pour tous les form qui ont un "data-confirm" (voir assets/js/script.js) --}}
+											</td>
+										@endif
 										<td><a href="{!! action('TPsController@index',array('belongsToId'=>$classe->id)) !!}" class="btn btn-info">TPs</a></td>
 										<td><a href="{!! action('EtudiantsController@index',array('belongsToId'=>$classe->id)) !!}" class="btn btn-info">Étudiants</a></td>
 										

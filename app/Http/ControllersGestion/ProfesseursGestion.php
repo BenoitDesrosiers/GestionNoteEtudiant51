@@ -10,14 +10,14 @@ use App\Models\Role;
 use Input;
 use Hash;
 
-class EtudiantsGestion extends UsersGestion{
+class ProfesseursGestion extends UsersGestion{
 
 protected function filter1($filteringItem) {
-	return $this->filter1Type($filteringItem, 'e');
+	return $this->filter1Type($filteringItem, 'p');
 }
 protected function filter2($filterValue) {	
-	//Pour les Etudiants, le filter 2 est la sessionScholaire
-	return $this->filter2Type($filterValue, 'e');
+	//Pour les Professeur, le filter 2 est la sessionScholaire
+	return $this->filter2Type($filterValue, 'p');
 }
 
 
@@ -26,7 +26,7 @@ protected function filter2($filterValue) {
  *
  */
 public function store($input) {
-	return $this->storeTypeRole($input, 'e','etudiant');
+	return $this->storeTypeRole($input, 'p','professeur');
 }
 
 

@@ -39,6 +39,12 @@ protected function filter2($filterValue) {
 			} else {
 				$classes = $this->filteringClass->where('sessionscholaire_id', '=' , $filterValue)->get(); //va chercher les classes pour cette session
 			}
+			//Si l'usager connecté n'a pas la capacité de gérer les classes, alors on liste seulement les classes associées à cet usager.
+			if(!Auth::user()->ability('','ajout-classe')) {
+				$u = Auth::user();
+				$classes = $classes->filter(function($item) use ($u) {return $item->professeurs()->get()->contains("id",$u->id);} );
+			}
+			
 			$lignes = [];
 			foreach($classes as $classe) { //créé la liste des ids des TPs pour toutes ces classes.
 				$lignes[$classe->nom] = $classe->tps->sortBy('nom');
@@ -55,6 +61,7 @@ protected function filter2($filterValue) {
 		} catch (Exception $e) {
 			$lignes = [];
 		}	
+	
 	return $lignes;
 }
 
@@ -175,6 +182,12 @@ private function createHeaderForView( $option0, $item=null, $displayOnlyLinked=n
 	} else {//sinon affiche toutes les classes.
 		$lesClasses = Classe::all()->sortby("sessionscholaire_id"); //ce n'est pas exactement par session, mais si les id sont dans le bon ordre, ca le sera.
 	}
+	//Si l'usager connecté n'a pas la capacité de gérer les classes, alors on liste seulement les classes associées à cet usager. 
+	if(!Auth::user()->ability('','ajout-classe')) {
+		$u = Auth::user();
+		$lesClasses = $lesClasses->filter(function($item) use ($u) {return $item->professeurs()->get()->contains("id",$u->id);} );
+	}
+	
 	$belongsToList = createSelectOptions($lesClasses,[get_class(), 'createOptionsValue'], $option0);
 	if(isset($item)) { //si on a un item, on sélectionne toutes les classes déjà associées
 		$belongsToSelectedIds =  $item->classes->pluck('id')->toArray();

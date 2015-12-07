@@ -1,5 +1,5 @@
 @if ($lignes->isEmpty())
-	<p>Aucune etudiant de disponible!</p>
+	<p>Aucun etudiant de disponible!</p>
 @else
 <div class="table-responsive">	{{-- voir http://getbootstrap.com/css/#tables-responsive --}}
 	<table class="table">
