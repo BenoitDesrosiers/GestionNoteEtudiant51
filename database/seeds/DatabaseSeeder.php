@@ -48,6 +48,12 @@ class PermissionTableSeeder extends Seeder {
 		$permission->display_name = 'Passer les tests';
 		$permission->description  = 'Permet de passer les tests';
 		$permission->save();
+		
+		$permission = new Permission();
+		$permission->name         = 'enseigner';
+		$permission->display_name = 'donner des cours';
+		$permission->description  = 'donner des cours';
+		$permission->save();
 
 	}
 }
@@ -69,10 +75,12 @@ class RoleTableSeeder extends Seeder {
 		$role->attachPermission($permission);
 		$permission = Permission::where('name', '=', 'passer-test')->first();
 		$role->attachPermission($permission);
+		$permission = Permission::where('name', '=', 'enseigner')->first();
+		$role->attachPermission($permission);
 		
 
 		$role = new Role();
-		$role->name         = 'prof';
+		$role->name         = 'professeur';
 		$role->display_name = 'Professeur';
 		$role->description  = 'Les professeurs en charge des étudiants';
 		$role->save();
@@ -80,6 +88,8 @@ class RoleTableSeeder extends Seeder {
 		$permission = Permission::where('name', '=', 'ajout-etudiant')->first();
 		$role->attachPermission($permission);
 		$permission = Permission::where('name', '=', 'passer-test')->first();
+		$role->attachPermission($permission);
+		$permission = Permission::where('name', '=', 'enseigner')->first();
 		$role->attachPermission($permission);
 
 		$role = new Role();
@@ -100,15 +110,13 @@ class UserTableSeeder extends Seeder {
 		{
 			DB::table('users')->delete();
 			$user = new User();
-			$user->name = 'usager';
-			$user->nom = 'usager';
+			$user->name = 'Admin';
+			$user->nom = 'systeme';
 			$user->prenom = 'un';
 			$user->type= 'p';
-			$user->email = 'usager@chose.com';
+			$user->email = 'admin@chose.com';
 			$user->password = Hash::make('usager');;
 			$user->save();
-				
-			
 			$role = Role::where('name', '=', 'admin')->first();
 			$user->attachRole($role);
 				
@@ -120,9 +128,18 @@ class UserTableSeeder extends Seeder {
 			$user->email = 'prof1@chose.com';
 			$user->password = Hash::make('usager');;
 			$user->save();
+			$role = Role::where('name', '=', 'professeur')->first();
+			$user->attachRole($role);
 			
-				
-			$role = Role::where('name', '=', 'prof')->first();
+			$user = new User();
+			$user->name = 'prof2';
+			$user->nom = 'prof ';
+			$user->prenom = 'un';
+			$user->type= 'p';
+			$user->email = 'prof2@chose.com';
+			$user->password = Hash::make('usager');;
+			$user->save();	
+			$role = Role::where('name', '=', 'professeur')->first();
 			$user->attachRole($role);
 			
 			$user = new User();
@@ -132,9 +149,18 @@ class UserTableSeeder extends Seeder {
 			$user->type= 'e';
 			$user->email = 'etudiant1@chose.com';
 			$user->password = Hash::make('usager');;
-			$user->save();
+			$user->save();	
+			$role = Role::where('name', '=', 'etudiant')->first();
+			$user->attachRole($role);
 			
-				
+			$user = new User();
+			$user->name = 'etudiant2';
+			$user->nom = 'etudiant2';
+			$user->prenom = 'deux';
+			$user->type= 'e';
+			$user->email = 'etudiant2@chose.com';
+			$user->password = Hash::make('usager');;
+			$user->save();
 			$role = Role::where('name', '=', 'etudiant')->first();
 			$user->attachRole($role);
 			
