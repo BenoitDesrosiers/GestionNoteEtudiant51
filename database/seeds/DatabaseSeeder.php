@@ -54,6 +54,12 @@ class PermissionTableSeeder extends Seeder {
 		$permission->display_name = 'donner des cours';
 		$permission->description  = 'donner des cours';
 		$permission->save();
+		
+		$permission = new Permission();
+		$permission->name         = 'ajout-classe';
+		$permission->display_name = 'Ajout de classes';
+		$permission->description  = 'Permet d\'ajouter des classes';
+		$permission->save();
 
 	}
 }
@@ -72,6 +78,8 @@ class RoleTableSeeder extends Seeder {
 		$permission = Permission::where('name', '=', 'ajout-prof')->first();
 		$role->attachPermission($permission);
 		$permission = Permission::where('name', '=', 'ajout-etudiant')->first();
+		$role->attachPermission($permission);
+		$permission = Permission::where('name', '=', 'ajout-classe')->first();
 		$role->attachPermission($permission);
 		$permission = Permission::where('name', '=', 'passer-test')->first();
 		$role->attachPermission($permission);
