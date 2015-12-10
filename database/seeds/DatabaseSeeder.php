@@ -7,6 +7,9 @@ use App\Models\User;
 
 use App\Models\Role;
 use App\Models\Permission;
+use App\Models\Classe;
+use App\Models\Sessionscholaire;
+use App\Models\Programme;
 
 class DatabaseSeeder extends Seeder {
 
@@ -17,14 +20,73 @@ class DatabaseSeeder extends Seeder {
 	 */
 	public function run()
 	{
+		$this->call('SessionTableSeeder');
+		$this->call('ProgrammeTableSeeder');
+		$this->call('ClasseTableSeeder');
 		$this->call('PermissionTableSeeder');
 		$this->call('RoleTableSeeder');
 		$this->call('UserTableSeeder');
-		$this->call('SessionTableSeeder');
+
+		
 		
 	}
 }
 	
+class SessionTableSeeder extends Seeder {
+
+	public function run()
+	{
+		$sessions = ["A2014", "H2015", "E2015","A2015", "H2016", "E2016"];
+		DB::table('sessionscholaires')->delete();
+		foreach($sessions as $session) {
+			$courant = ($session == 'H2016');
+			DB::table('sessionscholaires')->insert(array('nom'=>$session , 'courant'=>$courant));
+		}
+	}
+}
+class ProgrammeTableSeeder extends Seeder {
+
+	public function run()
+	{
+		DB::table('programmes')->delete();
+
+		$programme = new Programme();
+		$programme->id = '420AA';	
+		$programme->nom = "Techniques Informatique: informatique de gestion";	
+		$programme->save();
+	}
+}
+class ClasseTableSeeder extends Seeder {
+
+	public function run()
+	{
+		DB::table('classes')->delete();
+
+		$classe = new Classe();
+		$classe->code = "420-CN2-DM";
+		$classe->nom =  "Prog web 2";
+		$classe->groupe = "0001";
+		$classe->local = "1512-1";
+		$sessionscholaire = Sessionscholaire::where('nom', '=', 'A2015')->first();
+		$sessionscholaire->classes()->save($classe);
+			
+		$classe = new Classe();
+		$classe->code = "420-DM1-DM";
+		$classe->nom =  "Projet 1";
+		$classe->groupe = "0001";
+		$classe->local = "1512-1";
+		$sessionscholaire = Sessionscholaire::where('nom', '=', 'A2015')->first();
+		$sessionscholaire->classes()->save($classe);
+
+		$classe = new Classe();
+		$classe->code = "420-DM2-DM";
+		$classe->nom =  "Projet 2";
+		$classe->groupe = "0001";
+		$classe->local = "1512-1";
+		$sessionscholaire = Sessionscholaire::where('nom', '=', 'H2016')->first();
+		$sessionscholaire->classes()->save($classe);
+	}
+}
 
 class PermissionTableSeeder extends Seeder {
 
@@ -116,39 +178,52 @@ class UserTableSeeder extends Seeder {
 	
 		public function run()
 		{
+			
+			$programme = Programme::where('id', '=', '420AA')->first();
+			$classeCN2 = Classe::where('code', '=', '420-CN2-DM')->first();
+			$classeDM1 = Classe::where('code', '=', '420-DM1-DM')->first();
+			$classeDM2 = Classe::where('code', '=', '420-DM2-DM')->first();
+			
+			$roleadmin = Role::where('name', '=', 'admin')->first();
+			$roleprof  = Role::where('name', '=', 'professeur')->first();
+			$roleetudiant = Role::where('name', '=', 'etudiant')->first();
+				
+			
+			DB::table('users_classes')->delete();
 			DB::table('users')->delete();
 			$user = new User();
 			$user->name = 'Admin';
 			$user->nom = 'systeme';
-			$user->prenom = 'un';
+			$user->prenom = 'admin';
 			$user->type= 'p';
 			$user->email = 'admin@chose.com';
 			$user->password = Hash::make('usager');;
 			$user->save();
-			$role = Role::where('name', '=', 'admin')->first();
-			$user->attachRole($role);
+			$user->attachRole($roleadmin);
 				
 			$user = new User();
 			$user->name = 'prof1';
-			$user->nom = 'prof ';
+			$user->nom = 'prof1 ';
 			$user->prenom = 'un';
 			$user->type= 'p';
 			$user->email = 'prof1@chose.com';
 			$user->password = Hash::make('usager');;
-			$user->save();
-			$role = Role::where('name', '=', 'professeur')->first();
-			$user->attachRole($role);
+			$programme->users()->save($user);
+			$user->attachRole($roleprof);
+			$user->classes()->sync([$classeCN2->id, $classeDM1->id]);
+				
 			
 			$user = new User();
 			$user->name = 'prof2';
-			$user->nom = 'prof ';
-			$user->prenom = 'un';
+			$user->nom = 'prof2 ';
+			$user->prenom = 'deux';
 			$user->type= 'p';
 			$user->email = 'prof2@chose.com';
 			$user->password = Hash::make('usager');;
-			$user->save();	
-			$role = Role::where('name', '=', 'professeur')->first();
-			$user->attachRole($role);
+			$programme->users()->save($user);
+			$user->attachRole($roleprof);
+			$user->classes()->sync([$classeCN2->id, $classeDM2->id]);
+				
 			
 			$user = new User();
 			$user->name = 'etudiant1';
@@ -157,9 +232,10 @@ class UserTableSeeder extends Seeder {
 			$user->type= 'e';
 			$user->email = 'etudiant1@chose.com';
 			$user->password = Hash::make('usager');;
-			$user->save();	
-			$role = Role::where('name', '=', 'etudiant')->first();
-			$user->attachRole($role);
+			$programme->users()->save($user);
+			$user->attachRole($roleetudiant);
+			$user->classes()->sync([$classeCN2->id, $classeDM1->id]);
+				
 			
 			$user = new User();
 			$user->name = 'etudiant2';
@@ -168,23 +244,13 @@ class UserTableSeeder extends Seeder {
 			$user->type= 'e';
 			$user->email = 'etudiant2@chose.com';
 			$user->password = Hash::make('usager');;
-			$user->save();
+			$programme->users()->save($user);
 			$role = Role::where('name', '=', 'etudiant')->first();
-			$user->attachRole($role);
+			$user->attachRole($roleetudiant);
+			$user->classes()->sync([$classeCN2->id, $classeDM1->id, $classeDM2->id]);
+				
 			
 		}
-}
-class SessionTableSeeder extends Seeder {
-
-	public function run()
-	{
-		$sessions = ["A2014", "H2015", "E2015","A2015", "H2016", "E2016"];
-		DB::table('sessionscholaires')->delete();
-		foreach($sessions as $session) {
-			$courant = ($session == 'H2015');
-			DB::table('sessionscholaires')->insert(array('nom'=>$session , 'courant'=>$courant));
-		}
-	}
 }
 
 
