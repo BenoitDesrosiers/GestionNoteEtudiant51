@@ -123,6 +123,7 @@ class TPsController extends BaseFilteredResourcesController
 	 			} elseif(isset($input['questionPrecedente']))	 {
 	 				$offset_question--;
 	 			}
+	 			
 	 			return View::make($this->baseView.'.corriger', $this->gestion->corriger($tp_id, $classe_id,  $offset_etudiant, $offset_question) );
 	 		}
  		} else {
