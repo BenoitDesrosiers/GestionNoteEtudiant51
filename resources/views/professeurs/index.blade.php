@@ -6,7 +6,7 @@
 			<div class="jumbotron text-left">
 				<div class="panel panel-default">
 					<div class="panel-heading">
-						<h1> Liste des étudiants</h1>
+						<h1> Liste des professeurs</h1>
 						{!! Form::open(['action'=> ['ProfesseursController@create'], 'role' => 'form', 'method' => 'get', 'class' => 'form-inline']) !!}
 							{!! Form::hidden('belongsToId', '1', array('id'=>'belongsToId')) !!}
 							<div class="form-group">

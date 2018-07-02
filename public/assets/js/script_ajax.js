@@ -51,12 +51,15 @@ function afficheListeItems() {
 		type: 'POST',
 		url: controllerCallBackRoute,
 		data: dataObject, 
-		timeout: 1000,
+		timeout: 10000,  //laisser une grosse valeur, sinon xdebug cause un time out.
 		success: function(data){
 			document.getElementById('liste-items').innerHTML=data;
 			 catchDataConfirm();
 				setResizableDiv();
-			}
+			},
+		error: function(jqxhr, textStatus, error){
+			document.getElementById('liste-items').innerHTML=textStatus;
+		}
 	});		
 }	
 

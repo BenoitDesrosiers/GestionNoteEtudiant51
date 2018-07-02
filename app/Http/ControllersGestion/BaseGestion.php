@@ -28,7 +28,7 @@ public function listePages($pages)
  */
 public function listeAllLignes(){
 	return $this->model->all();
-}	
+}
 
 
 }

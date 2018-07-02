@@ -17,7 +17,7 @@ Route::group(['middleware'=>'auth'], function() {
 		Route::group(['middleware'=>['role:admin']], function() {
 			Route::resource('professeurs', 'ProfesseursController');
 			Route::post('professeursPourClasse', ['as' => 'professeursPourClasse', 'uses' => 'ProfesseursController@itemsFor2Filters']);     //pour l'appel AJAX
-					
+
 		});
 	
 		Route::group(['middleware'=>['role:admin|professeur']], function() { 
